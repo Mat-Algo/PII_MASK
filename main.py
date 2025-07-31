@@ -2,20 +2,8 @@ import streamlit as st
 import tempfile
 import os
 import logging
-from presidio_analyzer import AnalyzerEngine
-from presidio_anonymizer import AnonymizerEngine
 import fitz  # PyMuPDF
 import re
-import spacy
-from spacy.cli import download as spacy_download
-
-try:
-    spacy.load("en_core_web_sm")
-except OSError:
-    spacy_download("en_core_web_sm")
-
-
-
 
 
 # --- ContactPIIMasker class (focused on per-page redaction) ---
@@ -23,8 +11,6 @@ class ContactPIIMasker:
     """PDF masker for emails, phone numbers, LinkedIn URLs and photos."""
     def __init__(self, confidence_threshold: float = 0.35, enable_logging: bool = False):
         self.confidence_threshold = confidence_threshold
-        self.analyzer = AnalyzerEngine()
-        self.anonymizer = AnonymizerEngine()
         if enable_logging:
             logging.basicConfig(level=logging.INFO,
                                 format='%(asctime)s - %(levelname)s - %(message)s')
