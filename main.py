@@ -77,7 +77,7 @@ class ContactPIIMasker:
 def main():
     st.set_page_config(page_title="EXPERT HIRE", layout="centered")
     st.markdown("<h1 style='text-align: center;'>EXPERT HIRE</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Smart redaction of contact details from candidate resumes</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Smart redaction of PII data from candidate resumes</p>", unsafe_allow_html=True)
     
     uploaded = st.file_uploader("📄 Upload a resume PDF", type=["pdf"])
     
@@ -108,12 +108,6 @@ def main():
         st.markdown("---")
         st.markdown("### 📑 Redaction Summary")
         st.code(report_text)
-        st.download_button(
-            label="📥 Download Report",
-            data=report_text,
-            file_name=output_name.replace('.pdf', '_report.txt'),
-            mime="text/plain"
-        )
     else:
         st.info("Please upload a PDF file to begin redaction.")
 
