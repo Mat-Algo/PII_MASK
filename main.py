@@ -27,7 +27,7 @@ class ContactPIIMasker:
         return text
 
     def mask_contact_info_in_pdf(self, pdf_path: str, output_path: str,
-                                 remove_photos: bool = True) -> Tuple[int, str]:
+                                 remove_photos: bool = True)
         """
         Redacts emails, phones, LinkedIn URLs, and optionally removes images.
         Returns (total_redactions, report_text).
