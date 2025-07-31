@@ -16,6 +16,8 @@ except OSError:
 
 
 
+
+
 # --- ContactPIIMasker class (focused on per-page redaction) ---
 class ContactPIIMasker:
     """PDF masker for emails, phone numbers, LinkedIn URLs and photos."""
