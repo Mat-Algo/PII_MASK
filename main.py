@@ -24,6 +24,23 @@ class ContactPIIMasker:
         email_re = re.compile(r'\b[\w._%+-]+@[\w.-]+\.[A-Za-z]{2,}\b')
         phone_re = re.compile(r'\b(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b')
         linkedin_re = re.compile(r'(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_-]+', re.IGNORECASE)
+        # US Address: e.g., 111 1st Avenue, Redmond, WA 65432
+        us_address_re = re.compile(
+            r'\b\d{1,5}\s(?:[A-Za-z0-9]+\s){0,5}'
+            r'(?:Avenue|Ave|Street|St|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Place|Pl|Way|Circle|Cir|Terrace|Highway|Hwy)'
+            r'(?:\s(?:[A-Za-z]+))*[,]?\s(?:[A-Za-z]+\s?)*\b[A-Z]{2}\s\d{5}\b',
+            re.IGNORECASE
+        )
+
+        # Indian Address: e.g., Flat No. 202, Whitefield, Bangalore - 560066
+        indian_address_re = re.compile(
+            r'\b(?:Flat|House|Plot|Door)?\.?\s*No\.?\s*\d+[A-Za-z]?\s*(?:,|\n)?\s*'
+            r'(?:[A-Za-z0-9\s,-]{5,100})?[, ]+(?:[A-Za-z]+\s?)+-?\s*\d{6}\b',
+            re.IGNORECASE
+        )
+
+        # Landmark keywords like 'near SBI Bank'
+        landmark_keywords = ['near', 'beside', 'opposite', 'behind', 'next to', 'close to']
 
         for page_num, page in enumerate(doc, start=1):
             page_redactions = 0
@@ -45,7 +62,14 @@ class ContactPIIMasker:
                     txt_i = "".join(s["text"] for s in spans_i)
                     spans_to_redact = []
 
-                    if email_re.search(txt_i) or phone_re.search(txt_i):
+                    text_lower = txt_i.lower()
+                    if (
+                        email_re.search(txt_i)
+                        or phone_re.search(txt_i)
+                        or us_address_re.search(txt_i)
+                        or indian_address_re.search(txt_i)
+                        or any(k in text_lower for k in landmark_keywords)
+                    ):
                         spans_to_redact = spans_i
                     else:
                         if idx + 1 < len(lines):
