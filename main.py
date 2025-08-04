@@ -63,6 +63,7 @@ class ContactPIIMasker:
                     spans_to_redact = []
 
                     text_lower = txt_i.lower()
+                    
                     if (
                         email_re.search(txt_i)
                         or phone_re.search(txt_i)
